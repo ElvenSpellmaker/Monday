@@ -1,0 +1,7 @@
+.git
+bin/build-docker-image.bash
+config.php
+config.local.php
+userlist*
+Dockerfile
+README.md
