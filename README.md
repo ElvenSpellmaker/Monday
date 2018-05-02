@@ -15,8 +15,14 @@ Notes:
 
 Usage
 -----
-
 1. Copy `config.php` to `config.local.php` and then add your company name,
 the board id you want to add the users to, and the cookie of a logged-in admin
 user.
 2. Run `php monday-add-guests.php` and enjoy.
+
+Docker Usage
+------------
+1. If you'd like to run this in a Docker container, I have one prepared. Follow
+the above steps of creating a `userlist` and a `config.local.php`.
+2. Run the Docker image supplying a bindmount to the directory with the files:
+`docker run --rm -v /path/to/configs:/bindmount -t elvenspellmaker/docker-monday:latest`
