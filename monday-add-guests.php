@@ -2,6 +2,7 @@
 
 require __DIR__ . '/func/get_csrf.php';
 require __DIR__ . '/func/add_monday_user.php';
+require __DIR__ . '/func/find_monday_user.php';
 
 $config = 'config.local.php';
 if (! file_exists(__DIR__ . '/' . $config))
@@ -19,6 +20,7 @@ $rootDomain = "$company.monday.com";
 $baseUrl = "https://$rootDomain";
 $boardUrl = "$baseUrl/boards/$boardId";
 $subscribeUrl = "$baseUrl/projects/$boardId/subscribers";
+$searchUrl = "$baseUrl/search/add_subscribers_search";
 
 $cookie = 'Cookie: ' . $config['cookie'];
 
@@ -47,5 +49,6 @@ if (! file_exists($file))
 $users = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 foreach ($users as $user)
 {
-	add_monday_user($user, $subscribeUrl, $opts);
+	$findResult = find_monday_user($user, $searchUrl, $boardId, $opts);
+	add_monday_user($findResult, $subscribeUrl, $opts);
 }

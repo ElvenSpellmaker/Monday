@@ -1,13 +1,16 @@
 <?php
 
-function add_monday_user(string $user, string $subscribeUrl, array $opts)
+function add_monday_user(array $findResult, string $subscribeUrl, array $opts)
 {
-	static $json = '{"members":[{"email":"%s","kind":"guest"}],"make_admin":false}';
-	$user = strtolower($user);
+	$json = $findResult['found'] === true
+		? '{"members":["%s"],"make_admin":false}'
+		: '{"members":[{"email":"%s","kind":"guest"}],"make_admin":false}';
 
-	$opts['http']['content'] = sprintf($json, $user);
+	$opts['http']['content'] = sprintf($json, $findResult['user']);
 
 	$content = file_get_contents($subscribeUrl, null, stream_context_create($opts));
+
+	$user = $findResult['email'];
 
 	if (strpos($content, 'user_exists_with_wrong_type') !== false)
 	{
@@ -15,9 +18,13 @@ function add_monday_user(string $user, string $subscribeUrl, array $opts)
 		return;
 	}
 
-	if (preg_match("%{\"$user\":\d+}%", $content))
+	if ($content === '{}')
 	{
-		echo "Sent an e-mail to '$user'!\n";
+		$existing = $user === $findResult['user']
+			? ' existing '
+			: ' ';
+
+		echo "Sent an e-mail to$existing'$user'!\n";
 		return;
 	}
 
