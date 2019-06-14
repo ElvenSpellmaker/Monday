@@ -26,7 +26,7 @@ function find_monday_user(
 		'term' => $user,
 	];
 
-	$searchUrl .= http_build_query($queryString);
+	$searchUrl .= '?' . http_build_query($queryString);
 
 	$opts['http']['method'] = 'GET';
 
